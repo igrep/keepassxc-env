@@ -2,8 +2,15 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+import os
+import re
 
-from keepassxc_proxy_client import __version__
+with open(os.path.join('keepassxc_proxy_client', '__init__.py'), 'r') as f:
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", f.read(), re.M)
+    if version_match:
+        version = version_match.group(1)
+    else:
+        raise RuntimeError("Unable to find version string.")
 
 
 # Build the page that will be displayed on PyPI from the README and CHANGELOG
@@ -18,7 +25,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="keepassxc-proxy-client",
-    version=__version__,
+    version=version,
     author="Henrik Boeving",
     author_email="hargonix@gmail.com",
     description="A CLI for keepassxc-proxy",
