@@ -96,5 +96,5 @@ def main():
 
         sys.exit(0)
     else:
-        print("Unkown subcommand, see --help for usage")
+        print("Unknown subcommand, see --help for usage")
         sys.exit(1)
