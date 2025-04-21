@@ -124,10 +124,15 @@ def run_await_get():
         except Exception as e:
             error_str = str(e)
             # Check for the specific connection error
-            if isinstance(
-                    e,
-                    keepassxc_proxy_client.protocol.ResponseUnsuccesfulException,
-            ) or "Error: Connection could not be established to pipe org.keepassxc.KeePassXC.BrowserServer_" in error_str and "指定されたファイルが見つかりません。" in error_str:
+            is_response_unsuccessful = isinstance(
+                e,
+                keepassxc_proxy_client.protocol.ResponseUnsuccesfulException,
+            )
+            is_connection_error =(
+                    "Error: Connection could not be established to pipe org.keepassxc.KeePassXC.BrowserServer_" in error_str
+                    and "指定されたファイルが見つかりません。" in error_str
+            )
+            if is_response_unsuccessful or is_connection_error:
                 print(
                     f"KeePassXC not running or database locked. Retrying in {retry_interval} seconds...")
                 time.sleep(retry_interval)
