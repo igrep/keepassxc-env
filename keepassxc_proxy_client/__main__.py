@@ -134,10 +134,10 @@ def run_await_get():
             )
             if is_response_unsuccessful or is_connection_error:
                 print(
-                    f"KeePassXC not running or database locked. Retrying in {retry_interval} seconds...")
+                    f"KeePassXC not running or database locked. Retrying in {retry_interval} seconds...",
+                    file=sys.stderr,
+                )
                 time.sleep(retry_interval)
                 continue
             else:
-                # For any other exceptions, print and exit
-                print(f"Error: {e}")
-                sys.exit(1)
+                raise e
