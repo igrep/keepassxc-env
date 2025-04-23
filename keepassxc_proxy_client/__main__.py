@@ -141,3 +141,6 @@ def run_await_get():
                 continue
             else:
                 raise e
+
+if __name__ == "__main__":
+    main()
