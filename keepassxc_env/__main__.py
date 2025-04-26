@@ -3,27 +3,27 @@ import json
 import base64
 import time
 
-import keepassxc_proxy_client
-import keepassxc_proxy_client.protocol
+import keepassxc_env
+import keepassxc_env.protocol
 
-USAGE = """usage: keepassxc_proxy_client
+USAGE = """usage: keepassxc-env
 
-keepassxc_proxy_client create: Connects to a locally running keepassxc instance,
+keepassxc_env create: Connects to a locally running keepassxc instance,
 creates a new association with it (this will prompt a dialogue from keepassxc)
 and prints it to stdout as JSON. Note that the public key that is printed is
 secret and can allow anyone with access to your local machine access to all
 passwords that are related to a URL, thus it should be stored safely.
 
-keepassxc_proxy_client get <file> <url>: Reads a keepassxc association from
+keepassxc_env get <file> <url>: Reads a keepassxc association from
 <file> and attempts to get the first password for <url>. Will exit with 1 if the
 association is not valid for the running keepassxc instance or the no logins are
 found for the given URL.
 
-keepassxc_proxy_client await_get <file> <url>: Same as 'get' but retries every 10 seconds
+keepassxc_env await_get <file> <url>: Same as 'get' but retries every 10 seconds
 when encountering connection errors. This is useful when KeePassXC is not yet running
 or the database is locked.
 
-keepassxc_proxy_client unlock <file>: Causes a running KeepassXC instance
+keepassxc_env unlock <file>: Causes a running KeepassXC instance
 to launch a dialogue window to allow the user to unlock a locked database.
 If the database is already unlocked it has no effect.
 """
@@ -37,7 +37,7 @@ def main():
     command = sys.argv[1]
 
     if command == "create":
-        connection = keepassxc_proxy_client.protocol.Connection()
+        connection = keepassxc_env.protocol.Connection()
         connection.connect()
         connection.associate()
 
@@ -66,7 +66,7 @@ def main():
         associate_file = sys.argv[2]
         association = json.load(open(associate_file, "r"))
 
-        connection = keepassxc_proxy_client.protocol.Connection()
+        connection = keepassxc_env.protocol.Connection()
         connection.connect()
 
         connection.load_associate(
@@ -88,10 +88,10 @@ def run_get():
         sys.exit(1)
 
     associate_file = sys.argv[2]
-    url = sys.argv[3]
+    env_name = sys.argv[3]
 
     association = json.load(open(associate_file, "r"))
-    connection = keepassxc_proxy_client.protocol.Connection()
+    connection = keepassxc_env.protocol.Connection()
     connection.connect()
     connection.load_associate(
         association["name"],
@@ -102,7 +102,7 @@ def run_get():
         print("The loaded association is invalid")
         sys.exit(1)
 
-    logins = connection.get_logins(url)
+    logins = connection.get_logins("keepassxc-env://" + env_name)
     if not logins:
         print("No logins found for the given URL")
         sys.exit(1)
@@ -126,7 +126,7 @@ def run_await_get():
             # Check for the specific connection error
             is_response_unsuccessful = isinstance(
                 e,
-                keepassxc_proxy_client.protocol.ResponseUnsuccesfulException,
+                keepassxc_env.protocol.ResponseUnsuccesfulException,
             )
             is_connection_error =(
                     "Error: Connection could not be established to pipe org.keepassxc.KeePassXC.BrowserServer_" in error_str

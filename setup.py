@@ -5,7 +5,7 @@ from setuptools import setup
 import os
 import re
 
-with open(os.path.join('keepassxc_proxy_client', '__init__.py'), 'r') as f:
+with open(os.path.join('keepassxc_env', '__init__.py'), 'r') as f:
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", f.read(), re.M)
     if version_match:
         version = version_match.group(1)
@@ -24,21 +24,21 @@ with open('requirements.txt') as f:
 
 
 setup(
-    name="keepassxc-proxy-client",
+    name="keepassxc-env",
     version=version,
-    author="Henrik Boeving",
-    author_email="hargonix@gmail.com",
-    description="A CLI for keepassxc-proxy",
+    author="YAMAMOTO Yuji",
+    author_email="igrep@n.email.ne.jp",
+    description="A CLI to get environment variable from KeePassXC via keepassxc-proxy",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/hargoniX/keepassxc-proxy-client",
+    url="https://github.com/igrep/keepassxc-env",
     project_urls={
-        "Issue tracker": "https://github.com/hargoniX/keepassxc-proxy-client/issues",
-        "Changelog": "https://github.com/hargoniX/keepassxc-proxy-client/blob/master/CHANGELOG.md",
+        "Issue tracker": "https://github.com/igrep/keepassxc-env/issues",
+        "Changelog": "https://github.com/igrep/keepassxc-env/blob/master/CHANGELOG.md",
     },
-    packages=["keepassxc_proxy_client"],
+    packages=["keepassxc_env"],
     zip_safe=True,
-    entry_points={"console_scripts": ["keepassxc_proxy_client = keepassxc_proxy_client.__main__:main"]},
+    entry_points={"console_scripts": ["keepassxc_env = keepassxc_env.__main__:main"]},
     install_requires=required,
     classifiers=[
         "Development Status :: 4 - Beta",
